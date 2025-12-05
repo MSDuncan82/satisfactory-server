@@ -311,6 +311,8 @@ journalctl -u satisfactory -f
 
 ## 10. Updating the Server
 
+### Manual Update
+
 Stop the service:
 
 ```bash
@@ -328,6 +330,50 @@ Restart:
 ```bash
 sudo systemctl start satisfactory
 ```
+
+### Automated Daily Updates
+
+The server updates automatically at **6 AM PST/PDT** via cron job.
+
+**View current cron schedule:**
+
+```bash
+sudo crontab -l
+```
+
+**Edit cron schedule:**
+
+```bash
+sudo crontab -e
+```
+
+**Current automated update:**
+
+```cron
+0 6 * * * TZ=America/Los_Angeles /home/satisfactory/update_satisfactory.sh
+```
+
+**View update logs:**
+
+```bash
+sudo tail -f /var/log/satisfactory_updates.log
+```
+
+**View last 50 log entries:**
+
+```bash
+sudo tail -n 50 /var/log/satisfactory_updates.log
+```
+
+**Disable automatic updates:**
+
+```bash
+sudo crontab -e
+# Comment out the update line by adding # at the start:
+# 0 6 * * * TZ=America/Los_Angeles /home/satisfactory/update_satisfactory.sh
+```
+
+**Note:** The cron job runs with root privileges and automatically adjusts for daylight saving time (PST/PDT). Updates include stopping the server, downloading latest files via SteamCMD, and restarting the service.
 
 ---
 
